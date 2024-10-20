@@ -1,51 +1,45 @@
-#ifndef __SNAKE_H__
-#define __SNAKE_H__
+#ifndef SNAKE_H
+#define SNAKE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
-#define GRID_SIZE 25
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+#define SNAKE_SIZE 20
+#define INITIAL_LENGTH 5
+#define MAX_LENGTH 100
+#define NUM_WALLS 4
 
-typedef struct s_point Point ;
+typedef struct {
+    int x;
+    int y;
+} Point;
 
-struct s_point
-{
-	int x;
-	int y;
-};
+typedef struct {
+    Point snake[MAX_LENGTH];
+    int length;
+    int direction; // 0: droite, 1: bas, 2: gauche, 3: haut
+} Snake;
 
-typedef struct s_snake Snake;
-struct s_snake
-{
-	Point *body;
-	int length;
-	int direction;
+typedef struct {
+    Point position;
+} Food;
 
-};
+typedef struct {
+    SDL_Rect rect;
+} Wall;
 
-typedef struct s_game Game;
-struct s_game
-{
-	SDL_Window *window;
-	SDL_Renderer *renderer;
-	int width;
-	int height;
-	int food_count;
+// Function prototypes
+void initSDL();
+void clean();
+void drawSnake(Snake *serpent, SDL_Renderer *renderer);
+void drawFood(Food *food, SDL_Renderer *renderer);
+void drawMur(Wall *mur, int numWalls, SDL_Renderer *renderer);
+void updateSnake(Snake *serpent);
+int checkCollision(Snake *serpent, Wall *walls, int numWalls);
+int checkSelfCollision(Snake *serpent);
+void generateFood(Food *food);
+void moveSnake(Snake *serpent);
+void growSnake(Snake *serpent);
 
-};
-
-void init_game(Game *game, int width, int height, const char *title);
-void quit_game(Game *game);
-void init_snake(Snake *snake);
-void n_snake(Snake *snake);
-void render_snake(Game *game, Snake *snake);
-void place_food(Point *food);
-void render_food(Game *game, Point food);
-int check_collision(Snake *snake);
-int checl_food_coll(Snake *snake, Point food);
-void grow_snake(Snake *snake, Point food);
-
-#endif
+#endif // SNAKE_H

@@ -3,7 +3,6 @@
 NAME = snake
 
 SRCS = main.c \
-			plateau \
 			game.c \
 			 
 			 
